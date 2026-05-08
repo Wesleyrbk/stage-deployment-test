@@ -5,34 +5,28 @@ on:
         type: boolean
         description: "Deploy everything"
         default: false
-      deploy_keyvault:
-        type: boolean
-        description: "Deploy Key Vault"
-        default: false
-      deploy_storage:
-        type: boolean
-        description: "Deploy Storage Account"
-        default: false
       deploy_vnet:
         type: boolean
         description: "Deploy VNet"
         default: false
+      deploy_vm:
+        type: boolean
+        description: "Deploy VM"
+        default: false
 
 jobs:
-  deploy_keyvault:
-    if: inputs.deploy_all == true || inputs.deploy_keyvault == true
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Deploying Key Vault"
-
-  deploy_storage:
-    if: inputs.deploy_all == true || inputs.deploy_storage == true
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Deploying Storage Account"
-
   deploy_vnet:
     if: inputs.deploy_all == true || inputs.deploy_vnet == true
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploying VNet"
+
+  deploy_vm:
+    needs: deploy_vnet
+    if: |
+      always() &&
+      (inputs.deploy_all == true || inputs.deploy_vm == true) &&
+      (needs.deploy_vnet.result == 'success' || needs.deploy_vnet.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying VM"
