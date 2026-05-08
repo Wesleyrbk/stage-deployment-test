@@ -1,4 +1,60 @@
-# ── 1. Subscription & IAM ────────────────────────────────────────────────
+name: Deploy cito-shared-services-prd-001
+
+on:
+  workflow_dispatch:
+    inputs:
+      validation_mode:
+        type: boolean
+        description: 'Validatie Modus'
+        default: false
+      deploy_all:
+        type: boolean
+        description: 'Deploy Everything'
+        default: false
+      deploy_subscription_iam:
+        type: boolean
+        description: 'Deploy Subscription and IAM'
+        default: false
+      deploy_vnet:
+        type: boolean
+        description: 'Deploy vNet'
+        default: false
+      deploy_pdns_resolver:
+        type: boolean
+        description: 'Deploy pDNS Resolver'
+        default: false
+      deploy_pdns_zone:
+        type: boolean
+        description: 'Deploy pDNS Zone'
+        default: false
+      deploy_rmpl:
+        type: boolean
+        description: 'Deploy RMPL'
+        default: false
+      deploy_keyvault:
+        type: boolean
+        description: 'Deploy Key Vault'
+        default: false
+      deploy_win_vmss:
+        type: boolean
+        description: 'Deploy Windows VMSS'
+        default: false
+      deploy_lnx_vmss:
+        type: boolean
+        description: 'Deploy Linux VMSS'
+        default: false
+      deploy_app_reg_monitoring:
+        type: boolean
+        description: 'Deploy App Reg Monitoring'
+        default: false
+
+env:
+  SUBSCRIPTION_NAME: cito-shared-services-prd-001
+  DEPLOYMENT_LOCATION: West Europe
+
+jobs:
+
+  # ── 1. Subscription & IAM ────────────────────────────────────────────────
   job_subscription_iam:
     name: Deploy Subscription and IAM
     runs-on: ubuntu-latest
