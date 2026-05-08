@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ inputs.deploy_all == true || inputs.deploy_subscription_iam == true }}
     steps:
-      - run: echo 'Deploying Subscription and IAM (scope: subscription)'
+      - run: echo Deploying Subscription and IAM
 
   # ── 2. vNet ──────────────────────────────────────────────────────────────
   job_vnet:
@@ -69,7 +69,7 @@ jobs:
     needs: job_subscription_iam
     if: ${{ always() && (inputs.deploy_all == true || inputs.deploy_vnet == true) && (needs.job_subscription_iam.result == 'success' || needs.job_subscription_iam.result == 'skipped') }}
     steps:
-      - run: echo 'Deploying vNet (rg: rg-vnet-prd-001)'
+      - run: echo Deploying vNet rg-vnet-prd-001
 
   # ── 3. pDNS Resolver ─────────────────────────────────────────────────────
   job_pdns_resolver:
@@ -78,7 +78,7 @@ jobs:
     needs: job_vnet
     if: ${{ always() && (inputs.deploy_all == true || inputs.deploy_pdns_resolver == true) && (needs.job_vnet.result == 'success' || needs.job_vnet.result == 'skipped') }}
     steps:
-      - run: echo 'Deploying pDNS Resolver (rg: rg-dnsr-prd-001)'
+      - run: echo Deploying pDNS Resolver rg-dnsr-prd-001
 
   # ── 4. pDNS Zone ─────────────────────────────────────────────────────────
   job_pdns_zone:
@@ -87,7 +87,7 @@ jobs:
     needs: job_pdns_resolver
     if: ${{ always() && (inputs.deploy_all == true || inputs.deploy_pdns_zone == true) && (needs.job_pdns_resolver.result == 'success' || needs.job_pdns_resolver.result == 'skipped') }}
     steps:
-      - run: echo 'Deploying pDNS Zone (rg: rg-dnsz-prd-001)'
+      - run: echo Deploying pDNS Zone rg-dnsz-prd-001
 
   # ── 5. RMPL ──────────────────────────────────────────────────────────────
   job_rmpl:
@@ -96,7 +96,7 @@ jobs:
     needs: job_pdns_zone
     if: ${{ always() && (inputs.deploy_all == true || inputs.deploy_rmpl == true) && (needs.job_pdns_zone.result == 'success' || needs.job_pdns_zone.result == 'skipped') }}
     steps:
-      - run: echo 'Deploying RMPL (rg: rg-rmpl-prd-001)'
+      - run: echo Deploying RMPL rg-rmpl-prd-001
 
   # ── 6. Key Vault ─────────────────────────────────────────────────────────
   job_keyvault:
@@ -105,7 +105,7 @@ jobs:
     needs: job_rmpl
     if: ${{ always() && (inputs.deploy_all == true || inputs.deploy_keyvault == true) && (needs.job_rmpl.result == 'success' || needs.job_rmpl.result == 'skipped') }}
     steps:
-      - run: echo 'Deploying Key Vault (rg: rg-kv-prd-001)'
+      - run: echo Deploying Key Vault rg-kv-prd-001
 
   # ── 7a. Windows VMSS ─────────────────────────────────────────────────────
   job_win_vmss:
@@ -114,7 +114,7 @@ jobs:
     needs: job_keyvault
     if: ${{ always() && (inputs.deploy_all == true || inputs.deploy_win_vmss == true) && (needs.job_keyvault.result == 'success' || needs.job_keyvault.result == 'skipped') }}
     steps:
-      - run: echo 'Deploying Windows VMSS (rg: rg-vmss-prd-001, bicep: deploy_win.bicep)'
+      - run: echo Deploying Windows VMSS rg-vmss-prd-001
 
   # ── 7b. Linux VMSS ───────────────────────────────────────────────────────
   job_lnx_vmss:
@@ -123,7 +123,7 @@ jobs:
     needs: job_keyvault
     if: ${{ always() && (inputs.deploy_all == true || inputs.deploy_lnx_vmss == true) && (needs.job_keyvault.result == 'success' || needs.job_keyvault.result == 'skipped') }}
     steps:
-      - run: echo 'Deploying Linux VMSS (rg: rg-vmss-prd-001, bicep: deploy_lnx.bicep)'
+      - run: echo Deploying Linux VMSS rg-vmss-prd-001
 
   # ── 8. App Reg Monitoring ─────────────────────────────────────────────────
   job_app_reg_monitoring:
@@ -132,4 +132,4 @@ jobs:
     needs: [job_win_vmss, job_lnx_vmss]
     if: ${{ always() && (inputs.deploy_all == true || inputs.deploy_app_reg_monitoring == true) && (needs.job_win_vmss.result == 'success' || needs.job_win_vmss.result == 'skipped') && (needs.job_lnx_vmss.result == 'success' || needs.job_lnx_vmss.result == 'skipped') }}
     steps:
-      - run: echo 'Deploying App Reg Monitoring (rg: rg-app-reg-monitoring-prd-001)'
+      - run: echo Deploying App Reg Monitoring rg-app-reg-monitoring-prd-001
